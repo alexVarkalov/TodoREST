@@ -1,0 +1,26 @@
+postgres:
+  image: postgres:9.5
+  env_file: .env
+  volumes:
+    - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata
+
+todorest:
+  build: ./todorest
+  ports:
+    - "9090:9090"
+  links:
+    - postgres:postgres
+  env_file: .env
+  command: bash start.sh
+
+nginx:
+  build: ./nginx
+  env_file: .env
+  ports:
+    - "8080:80"
+  links:
+    - todorest:todorest
+
+
+
+
